@@ -2,10 +2,10 @@ FROM python:3.10-slim-buster
 
 WORKDIR /python-docker
 
-COPY requirements.txt requirements.txt
+COPY ./repo/backend/requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-COPY . .
+COPY ./repo/backend/ .
 
 EXPOSE 8000/tcp
 
