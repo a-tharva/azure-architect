@@ -44,11 +44,12 @@ jobs:
       contents: read
       id-token: write
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./repo/backend
     steps:
       # Checks out the repository this file is in
       - uses: actions/checkout@v4
-      - name: Checkout
-        working-directory: ./repo/backend
       
       # Logs in with your Azure credentials
       - name: Azure login
