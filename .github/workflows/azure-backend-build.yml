@@ -47,7 +47,9 @@ jobs:
     steps:
       # Checks out the repository this file is in
       - uses: actions/checkout@v4
-
+      - name: Checkout
+        working-directory: ./repo/backend
+      
       # Logs in with your Azure credentials
       - name: Azure login
         uses: azure/docker-login@v1
@@ -62,4 +64,4 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
-          file: repo/backend/Dockerfile
+          file: Dockerfile
