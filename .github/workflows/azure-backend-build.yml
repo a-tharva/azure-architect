@@ -38,10 +38,6 @@ on:
 env:
   CONTAINER_NAME: "backend"
 
-defaults:
-  run:
-    working-directory: ./repo/backend
-
 jobs:
   buildImage:
     permissions:
@@ -61,9 +57,9 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       # Builds and pushes an image up to your Azure Container Registry
+      - uses: docker/build-push-action@v6.7.0
       - name: Build and push image to ACR
-        uses: docker/build-push-action@v6.7.0
         with:
           push: true
           tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
-          file: Dockerfile
+          file: repo/backend/Dockerfile
