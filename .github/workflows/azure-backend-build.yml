@@ -38,15 +38,16 @@ on:
 env:
   CONTAINER_NAME: "backend"
 
+defaults:
+  run:
+    working-directory: ./repo/backend
+
 jobs:
   buildImage:
     permissions:
       contents: read
       id-token: write
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./repo/backend
     steps:
       # Checks out the repository this file is in
       - uses: actions/checkout@v4
