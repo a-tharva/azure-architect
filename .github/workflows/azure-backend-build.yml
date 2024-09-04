@@ -62,4 +62,4 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
-          file: Dockerfile
+          file: repo/backend/Dockerfile
