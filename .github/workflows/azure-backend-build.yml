@@ -61,5 +61,5 @@ jobs:
         uses: docker/build-push-action@v6.7.0
         with:
           push: true
-          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.CONTAINER_NAME }}:${{ github.sha }}
+          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.CONTAINER_NAME }}:${{ github.sha }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.CONTAINER_NAME }}:latest
           file: repo/backend/Dockerfile
