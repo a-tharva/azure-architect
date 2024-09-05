@@ -3,19 +3,19 @@ from random import randint
 from flask import Flask, render_template
 app = Flask(__name__, template_folder='templates')
 
-@app.route('/app/')
+@app.route('/api/')
 def index():
     return render_template('index.html')
 
-@app.route('/app/test')
+@app.route('/api/test')
 def test():
     return render_template('test.html')
 
-@app.route('/app/info')
+@app.route('/api/info')
 def info():
     return render_template('info.html')
 
-@app.route('/app/random')
+@app.route('/api/random')
 def random():
     return f'{randint(0,10)}'
 
