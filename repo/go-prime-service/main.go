@@ -9,11 +9,35 @@ import (
 	"os"
 	"strconv"
 
-	pb "prime-service/proto" // Adjust path to your proto packag
+	pb "prime-service/proto" // Adjust path to your proto package
 
 	"github.com/go-redis/redis/v8"
 	"google.golang.org/grpc"
 )
+
+// Config holds the configuration parameters
+type Config struct {
+	RedisAddr     string
+	RedisPassword string
+	GRPCPort      string
+}
+
+// loadConfig loads configuration from environment variables with defaults
+func loadConfig() Config {
+	return Config{
+		RedisAddr:     getEnv("REDIS_ADDR", "redis-cluster.redis.svc.cluster.local:6379"),
+		RedisPassword: getEnv("REDIS_PASSWORD", ""),
+		GRPCPort:      getEnv("GRPC_PORT", "50051"),
+	}
+}
+
+// getEnv retrieves an environment variable or returns a default value
+func getEnv(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
+}
 
 type server struct {
 	pb.UnimplementedPrimeServiceServer
@@ -123,24 +147,22 @@ func isPrime(n int64, primes []int64) bool {
 }
 
 func main() {
-	redisAddr := os.Getenv("REDIS_ADDR")
-	if redisAddr == "" {
-		redisAddr = "redis-cluster.redis.svc.cluster.local:6379" // Default for Helm Redis cluster
-	}
-	redisPassword := os.Getenv("REDIS_PASSWORD")
-	if redisPassword == "" {
-		redisPassword = "" // Default to no password if not set
-	}
+	// Load configuration
+	config := loadConfig()
 
+	// Initialize Redis client with configured values
 	rdb := redis.NewClusterClient(&redis.ClusterOptions{
-		Addrs:    []string{redisAddr},
-		Password: redisPassword,
+		Addrs:    []string{config.RedisAddr},
+		Password: config.RedisPassword,
 	})
 
-	lis, err := net.Listen("tcp", ":50051")
+	// Listen on configured port
+	lis, err := net.Listen("tcp", ":"+config.GRPCPort)
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("failed to listen on port %s: %v", config.GRPCPort, err)
 	}
+
+	// Create and start gRPC server
 	s := grpc.NewServer()
 	pb.RegisterPrimeServiceServer(s, &server{rdb: rdb})
 	log.Printf("Server listening at %v", lis.Addr())
