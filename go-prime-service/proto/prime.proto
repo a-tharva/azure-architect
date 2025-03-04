@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package prime;
+
+option go_package = "./proto";
+
+service PrimeService {
+    rpc GetPrimes (PrimeRequest) returns (PrimeResponse) {}
+}
+
+message PrimeRequest {
+    repeated int32 ns = 1;
+}
+
+message PrimeResponse {
+    repeated int64 primes = 1;
+}

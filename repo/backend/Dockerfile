@@ -1,12 +1,8 @@
-FROM python:3.10-slim-buster
+FROM python:3.9-slim
 
-WORKDIR /python-docker
+WORKDIR /app
+COPY . /app
+RUN pip install flask grpcio grpcio-tools redis
+EXPOSE 8000
 
-COPY ./repo/backend/requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
-
-COPY ./repo/backend/ .
-
-EXPOSE 8000/tcp
-
-CMD [ "python", "app.py"]
+CMD ["python", "app.py"]
