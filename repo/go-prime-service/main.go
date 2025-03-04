@@ -9,8 +9,9 @@ import (
 	"os"
 	"strconv"
 
+	pb "prime-service/proto" // Adjust path to your proto packag
+
 	"github.com/go-redis/redis/v8"
-	pb "path/to/your/proto" // Adjust path to your proto package
 	"google.golang.org/grpc"
 )
 
